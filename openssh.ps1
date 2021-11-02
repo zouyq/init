@@ -15,8 +15,6 @@ $file_list = @("authorized_keys",
     "id_rsa_nopass",
     "id_rsa_nopass.pub")
 
-
-
 if (!(Test-Path -Path $target_path)) {
     "create folder [$target_path] with parents" 
     New-Item -Path $target_path -ItemType Directory       
@@ -27,6 +25,6 @@ $Headers = @{"Authorization" = "Bearer $github_token" }
 For ($i = 0; $i -lt $file_list.Length; $i++) {
     $Url = $base_url + $file_list[$i]
     Invoke-RestMethod -Uri $Url -Method Get -Headers $Headers -OutFile ($target_path + "/" + $file_list[$i])
-    #Write-Host "download file $file_list[$i] from $Url finished!"
+    Write-Host "download file $file_list[$i] from $Url finished!"
 }
 
