@@ -1,6 +1,6 @@
-param($token,$ssh_folder)
-"github token is [$token]"
-"target folder is [$ssh_folder]"
+
+"github token is [$github_token]"
+"target folder is [$target_path]"
 
 $base_url = "https://raw.githubusercontent.com/zouyq/secrets/main/ssh/"
 $file_list = @("authorized_keys", 
@@ -17,16 +17,16 @@ $file_list = @("authorized_keys",
 
 
 
-if (!(Test-Path -Path $ssh_folder)) {
-    "create folder [$ssh_folder] with parents" 
-    New-Item -Path $ssh_folder -ItemType Directory       
+if (!(Test-Path -Path $target_path)) {
+    "create folder [$target_path] with parents" 
+    New-Item -Path $target_path -ItemType Directory       
 }
 
-$Headers = @{"Authorization" = "Bearer $token" } 
+$Headers = @{"Authorization" = "Bearer $github_token" } 
 
 For ($i = 0; $i -lt $file_list.Length; $i++) {
     $Url = $base_url + $file_list[$i]
-    Invoke-RestMethod -Uri $Url -Method Get -Headers $Headers -OutFile ($ssh_folder + "/" + $file_list[$i])
+    Invoke-RestMethod -Uri $Url -Method Get -Headers $Headers -OutFile ($target_path + "/" + $file_list[$i])
     #Write-Host "download file $file_list[$i] from $Url finished!"
 }
 
